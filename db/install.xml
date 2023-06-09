@@ -1,0 +1,17 @@
+
+<XMLDB xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" PATH="blocks/tildeva/db" VERSION="2023042602" COMMENT="XMLDB file for tildeva poll block" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+<TABLES>
+<TABLE NAME="chat_sessions" COMMENT="Contains chat session info for the tildeva block">
+<FIELDS>
+<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
+<FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
+<FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false"/>
+<FIELD NAME="conversationid" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false"/>
+</FIELDS>
+<KEYS>
+<KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+</KEYS>
+</TABLE>
+
+</TABLES>
+</XMLDB>
