@@ -4,6 +4,11 @@
 #### Changes
 -------
 
+### 2.1.6
+
+* 2023-06-17 - Bot can send notifications
+
+
 ### 2.1.5
 
 * 2023-06-17 - Bot API accessible by post API

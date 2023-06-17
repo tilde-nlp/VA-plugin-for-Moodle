@@ -89,12 +89,44 @@ switch ($action) {
                 $command = $matches[1];
                 if (strncmp($command, "db|", 3) === 0) {
                     $params = explode("|", $command);
-                    if (count($params) == 3){                       
-                        $sql =  $params[1];
+                    if (count($params) == 3) {
+                        $sql = $params[1];
                         $response[$params[2]] = $DB->get_records_sql($sql);
                         echo json_encode($response);
+                    } else {
+                        echo json_encode($command);
                     }
-                    else {
+                } else if (strncmp($command, "sendnotification|", 17) === 0) {
+                    $params = explode("|", $command);
+                    if (count($params) == 4) {
+                        $teacherid = $params[1];
+                        $subject = $params[2];
+                        $message = $params[3];
+                        // Load the messaging API
+                        require_once($CFG->dirroot . '/message/lib.php');
+
+                        // Create the message data
+                        $messageData = new \core\message\message();
+                        $messageData->component = 'moodle';
+                        $messageData->name = 'instantmessage';
+                        $messageData->userfrom = $USER;
+                        $messageData->userto = \core_user::get_user($teacherid);
+                        $messageData->subject = $subject;
+                        $messageData->fullmessage =  $message;
+                        $messageData->fullmessageformat = FORMAT_HTML;
+
+                        // Send the message
+                        $messageId = message_send($messageData);
+
+                        // Check if the message was sent successfully
+                        if ($messageId) {
+                            echo json_encode('Notification sent');
+                        } else {
+                            echo json_encode('Failed to send the notification.');
+                        }
+
+
+                    } else {
                         echo json_encode($command);
                     }
                 } else {
@@ -209,7 +241,6 @@ switch ($action) {
         }
         break;
     case 'deleteconversation':
-
         $DB->delete_records("chat_sessions", array('userid' => $userid, 'courseid' => $courseid));
         echo json_encode(true);
         break;
