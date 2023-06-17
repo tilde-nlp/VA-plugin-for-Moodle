@@ -4,6 +4,16 @@
 #### Changes
 -------
 
+### 2.1.5
+
+* 2023-06-17 - Bot API accessible by post API
+
+### 2.1.4
+
+* 2023-06-17 - Bot can process custom sql requests
+* 2023-06-16 - Bot receives information about course tests 
+
+
 ### 2.1.3
 
 * 2023-06-09 - Code uploaded to git

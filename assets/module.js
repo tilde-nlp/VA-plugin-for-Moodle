@@ -119,20 +119,20 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
                 from: { id: this.cfg.userid }, // required (from.name is optional)
                 type: 'endOfConversation'
             }).subscribe(
-                id => { 
+                id => {
                     this.directLine.end();
                     this.directLine = null;
-                    this.store = null; 
+                    this.store = null;
                     this.chatParams.conversationid = null;
                 },
                 error => console.log("Error posting activity", error)
             );
-           
-               
+
+
             this.wchat_maximize.removeAttribute('hidden');
             this.wchat_container.setAttribute('hidden');
-             // // Prepare and execute the first AJAX request of information.
-             Y.io(this.api, {
+            // // Prepare and execute the first AJAX request of information.
+            Y.io(this.api, {
                 method: 'POST',
                 data: build_querystring({
                     action: 'deleteconversation',
@@ -143,7 +143,7 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
                     success: function (tid, outcome) {
                         try {
                             console.log('Conversation deleted:' + outcome.responseText);
-                           
+
                         } catch (ex) {
                             return;
                         }
@@ -151,32 +151,32 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
                 },
                 context: this
             });
-                  
+
         },
 
         joinWebchat: function () {
             if (this.store == null) {
                 this.store = window.WebChat.createStore(
-                    {}, ({ dispatch }) => next => action => {    
+                    {}, ({ dispatch }) => next => action => {
                         if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
-                           
-        
+
+
                         } else if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
-                            if (action?.payload?.activity?.text?.startsWith("command:")){
+                            if (action?.payload?.activity?.text?.startsWith("command:")) {
                                 return next;
                             }
                         }
                         else if (action.type === 'WEB_CHAT/SEND_MESSAGE') {
-                            
+
                         }
-                       
+
                         else if (action.type === "WEB_CHAT/SET_SUGGESTED_ACTIONS") {
-                           
+
                         }
                         if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
-                          
+
                         }
-                        if (action.type == 'endOfConversation'){
+                        if (action.type == 'endOfConversation') {
                             return next;
                         }
 
@@ -199,10 +199,10 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
                             this.respondToMsg = true;
                         }
                     });
-                    this.directLine.activity$
-                    .filter(activity => activity.type === 'message' && activity.from.name === "Bot" )
+                this.directLine.activity$
+                    .filter(activity => activity.type === 'message' && activity.from.name === "Bot")
                     .subscribe(message => {
-                        
+
                         if (this.respondToMsg && message && message.text && message.text.startsWith("command:")) {
                             Y.io(this.api, {
                                 method: 'POST',
@@ -236,7 +236,7 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
                                         chat_convid: encodeURIComponent(this.directLine.conversationId)
                                     }),
                                     on: {
-                                        success: function (tid, outcome) {},
+                                        success: function (tid, outcome) { },
                                         failure: function (id, response) {
                                             console.error('Error:', response.statusText);
                                             // Handle the failure/error here
@@ -330,7 +330,11 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
             }
         },
         send_callback: function (tid, outcome, args) {
-            try {
+            try {                
+                if (!outcome.responseText || outcome.responseText == null ||  outcome.responseText == ""){
+                    outcome.responseText = {"response": "no-data"};
+                }
+               // console.log(outcome.responseText);
                 var data = Y.JSON.parse(outcome.responseText);
                 var resp = {};
                 for (let key in data) {
@@ -344,23 +348,22 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
                         type: 'event',
                         name: 'webchat/context', value: JSON.stringify(data)
                     }).subscribe(
-                        id => { /*console.log("Posted activity, assigned ID ", id);*/ },
+                        id => {
+                            
+                        },
+                        error => console.log("Error posting activity", error)
+                    );
+                    this.directLine.postActivity({
+                        type: 'message',
+                        from: { id: this.cfg.userid },
+                        channelData: { postBack: true },
+                        textFormat: 'plain',
+                        text: 'command:processed'
+                    }).subscribe(
+                        id => { /*console.log("Posted activity, assigned ID ", id); */ },
                         error => console.log("Error posting activity", error)
                     );
 
-                    setTimeout(() => {
-                        this.directLine.postActivity({
-                            type: 'message',
-                            from: { id: this.cfg.userid },
-                            channelData: { postBack: true },
-                            textFormat: 'plain',
-                            text: 'command:processed'
-                        }).subscribe(
-                            id => { /*console.log("Posted activity, assigned ID ", id); */},
-                            error => console.log("Error posting activity", error)
-                        );
-
-                    }, 200);
                 }
 
 
