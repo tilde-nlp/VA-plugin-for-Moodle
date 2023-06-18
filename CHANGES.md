@@ -4,6 +4,10 @@
 #### Changes
 -------
 
+### 2.1.7
+
+* 2023-06-18 - Bot can send messages to user (updated)
+
 ### 2.1.6
 
 * 2023-06-17 - Bot can send notifications

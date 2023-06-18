@@ -47,7 +47,10 @@ if (!isloggedin() && $conversationid != $chatsession->conversationid) {
 // $PAGE->set_cm($cm, $course, $chat);
 $PAGE->set_url('/blocks/tildeva/chat_ajax.php', array('chat_usid' => $userid));
 
+$courseContext = \context_course::instance($courseid);
 
+// Create a new page instance
+$PAGE->set_context($courseContext);
 
 ob_start();
 header('Expires: Sun, 28 Dec 1997 09:32:45 GMT');
@@ -96,29 +99,55 @@ switch ($action) {
                     } else {
                         echo json_encode($command);
                     }
-                } else if (strncmp($command, "sendnotification|", 17) === 0) {
+                } else if (strncmp($command, "sendmsg", 7) === 0) {
                     $params = explode("|", $command);
-                    if (count($params) == 4) {
-                        $teacherid = $params[1];
-                        $subject = $params[2];
-                        $message = $params[3];
-                        // Load the messaging API
-                        require_once($CFG->dirroot . '/message/lib.php');
+                    if (count($params) == 3) {
+                        $userfrom = \core_user::get_user($userid);
+                        $userto = \core_user::get_user($params[1]);
+                        $message = $params[2];
+                        $format = FORMAT_HTML;
 
-                        // Create the message data
-                        $messageData = new \core\message\message();
-                        $messageData->component = 'moodle';
-                        $messageData->name = 'instantmessage';
-                        $messageData->userfrom = $USER;
-                        $messageData->userto = \core_user::get_user($teacherid);
-                        $messageData->subject = $subject;
-                        $messageData->fullmessage =  $message;
-                        $messageData->fullmessageformat = FORMAT_HTML;
+                        $eventdata = new \core\message\message();
+                        $eventdata->courseid         = $courseid;
+                        $eventdata->component        = 'moodle';
+                        $eventdata->name             = 'instantmessage';
+                        $eventdata->userfrom         = $userfrom;
+                        $eventdata->userto           = $userto;
+                    
+                        //using string manager directly so that strings in the message will be in the message recipients language rather than the senders
+                        $eventdata->subject          = get_string_manager()->get_string('unreadnewmessage', 'message', fullname($userfrom), $userto->lang);
+                    
+                        if ($format == FORMAT_HTML) {
+                            $eventdata->fullmessagehtml  = $message;
+                            //some message processors may revert to sending plain text even if html is supplied
+                            //so we keep both plain and html versions if we're intending to send html
+                            $eventdata->fullmessage = html_to_text($eventdata->fullmessagehtml);
+                        } else {
+                            $eventdata->fullmessage      = $message;
+                            $eventdata->fullmessagehtml  = '';
+                        }
+                    
+                        $eventdata->fullmessageformat = $format;
+                        $eventdata->smallmessage     = $message;//store the message unfiltered. Clean up on output.
+                        $eventdata->timecreated     = time();
+                        $eventdata->notification    = 0;
+                        // User image.
+                        $userpicture = new user_picture($userfrom);
+                        $userpicture->size = 1; // Use f1 size.
+                        $userpicture->includetoken = $userto->id; // Generate an out-of-session token for the user receiving the message.
+                        $eventdata->customdata = [
+                            'notificationiconurl' => $userpicture->get_url($PAGE)->out(false),
+                            'actionbuttons' => [
+                                'send' => get_string_manager()->get_string('send', 'message', null, $eventdata->userto->lang),
+                            ],
+                            'placeholders' => [
+                                'send' => get_string_manager()->get_string('writeamessage', 'message', null, $eventdata->userto->lang),
+                            ],
+                        ];
+                        $messageId = message_send($eventdata);                       
+                        
 
-                        // Send the message
-                        $messageId = message_send($messageData);
-
-                        // Check if the message was sent successfully
+                        // // Check if the message was sent successfully
                         if ($messageId) {
                             echo json_encode('Notification sent');
                         } else {
