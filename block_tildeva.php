@@ -87,6 +87,9 @@ class block_tildeva extends block_base
     public function get_content()
     {
         global $CFG, $PAGE, $DB, $COURSE, $USER;
+        if (!isloggedin() ) {
+           return null;
+        }
         if ($this->content !== null) {
             return $this->content;
         }

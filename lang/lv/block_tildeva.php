@@ -26,7 +26,7 @@ $string['tildeva:myaddinstance'] = 'Pievieno bloku Virtuālais asistents';
 $string['headerconfig'] = 'Virtuālā asistenta apraksts';
 $string['descconfig'] = 'Virtuālais asistents, kas palīdz pasniedzējiem un studentiem sagatavot un pabeigt obligāto kursu. Bots satur tādas funkcijas kā piekļuve kursa materiāliem, FAQ par ar kursu saistītām tēmām, pašvērtējums (testi), daži spēļu elementi mācību procesa uzlabošanai un palīdz studentiem un pasniedzējiem.';
 
-$string['chattitle'] = 'Apmācības palīgs';
+$string['chattitle'] = 'Virtuālā asistente';
 
 
 // Notifications.
