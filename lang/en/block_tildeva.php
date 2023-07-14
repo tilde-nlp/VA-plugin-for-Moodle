@@ -25,7 +25,7 @@ $string['tildeva:addinstance'] = 'Add a Tilde Virtual assistant block';
 $string['tildeva:myaddinstance'] = 'Add a Tilde Virtual assistant block to my Moodle';
 $string['headerconfig'] = 'Virtual assistant description';
 $string['descconfig'] = 'A chatbot that assists teachers and students in preparing and completing the mandatory course. The bot contains features like access to course materials, FAQ about the course related topics, self-assessment (tests), some gaming elements to enhance the learning process and assists students and lecturers.';
-$string['chattitle'] = 'Apmācības palīgs';
+$string['chattitle'] = 'Virtual assistant';
 
 // Notifications.
 $string['resetvisibilitysuccess'] = 'Success! All "block_tildeva" instances are visible (again). <br/> The setting "Reset visibility" has been reset.';

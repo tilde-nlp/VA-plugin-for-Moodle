@@ -6,11 +6,11 @@
 }
 
 :root {
-    --main-background-color: #335e6f;
+    --main-background-color: #C9DC50;
     --main-font-color: #fff;
     --avatar: url(https://va.tilde.com/api/prodk8sbotcava0/media/staging/5U6Z4A4NOPHR.jpg);
     --font-family: Roboto, Arial, sans-serif !important;
-    --subtle: #605e5c;
+    --subtle: #606060;
 }
 
 
@@ -29,7 +29,7 @@
     height: 56px;
     background-color: var(--main-background-color);
     display: flex;
-    border-radius: 8px 8px 0 0px;
+    /* border-radius: 8px 8px 0 0px; */
 }
 
 #webchat {
@@ -53,7 +53,7 @@
     color: var(--main-font-color);
     bottom: 80px;
     right: 30px;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     position: fixed;
     cursor: pointer;
 }
@@ -76,7 +76,7 @@
     position: absolute;
     display: flex;
     align-items: center;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     color: var(--main-font-color);
 }
 
@@ -151,7 +151,7 @@
     position: sticky;
     height: 32px;
     background-color: var(--main-font-color);
-    border-radius: 0px 0px 8px 8px;
+    /* border-radius: 0px 0px 8px 8px; */
     border: 1px solid var(--main-background-color);
     display: flex;
     align-items: center;
@@ -172,7 +172,7 @@
 
 .webchat__send-box-text-box__input {
     border: 1px solid #E8E8E8 !important;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     padding: 8px !important;
     background-color: #fff !important;
     height: auto !important;
@@ -204,7 +204,7 @@
     border-color: var(--main-background-color) !important;
     background-color: var(--main-font-color) !important;
     cursor: pointer;
-    color: var(--main-background-color) !important;
+    color: var(--subtle) !important;
 }
 
 .ac-pushButton:active,
