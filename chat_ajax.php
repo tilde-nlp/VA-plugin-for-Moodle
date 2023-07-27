@@ -94,8 +94,19 @@ switch ($action) {
                     $params = explode("|", $command);
                     if (count($params) == 3) {
                         $sql = $params[1];
-                        $response[$params[2]] = $DB->get_records_sql($sql);
-                        echo json_encode($response);
+                        if(strncmp($sql, "UPDATE", 6) === 0){
+                            $result = $DB->execute($sql);
+                            if ($result) {
+                                echo "success";
+                            } else {
+                                echo "error";
+                            }
+                        }
+                        else{
+                            $response[$params[2]] = $DB->get_records_sql($sql);
+                            echo json_encode($response);
+                        }
+                        
                     } else {
                         echo json_encode($command);
                     }
