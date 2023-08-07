@@ -202,8 +202,15 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
                 this.directLine.activity$
                     .filter(activity => activity.type === 'message' && activity.from.name === "Bot")
                     .subscribe(message => {
-
-                        if (this.respondToMsg && message && message.text && message.text.startsWith("command:")) {
+                        if (this.respondToMsg && message && message.text && message.text.startsWith("command:set_send_box")) {
+                            this.store.dispatch({
+                                type: 'WEB_CHAT/SET_SEND_BOX',
+                                payload: {
+                                  text: message.text.substring(21)
+                                }
+                              });
+                        }
+                        else if (this.respondToMsg && message && message.text && message.text.startsWith("command:")) {
                             Y.io(this.api, {
                                 method: 'POST',
                                 data: build_querystring({

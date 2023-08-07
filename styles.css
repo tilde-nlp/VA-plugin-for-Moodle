@@ -213,3 +213,4 @@
     color: var(--main-font-color) !important;
     background-color: var(--main-background-color) !important;
 }
+code{font-size: 100%!important;}
