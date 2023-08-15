@@ -30,3 +30,11 @@ $string['chattitle'] = 'Virtual assistant';
 // Notifications.
 $string['resetvisibilitysuccess'] = 'Success! All "block_tildeva" instances are visible (again). <br/> The setting "Reset visibility" has been reset.';
 $string['resetvisibilityerror'] = 'Oops... Something went wrong updating the database tables... <br/> The setting "Reset visibility" has been reset.';
+
+
+$string['courseid'] = 'Allowed Courses';
+$string['courseid_desc'] = 'Specify the course IDs where this virtual assistant will be available (multiple values separated by comma)';
+
+
+
+

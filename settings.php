@@ -24,5 +24,16 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-    // global $CFG;
+    // Add block settings
+
+    // Add course ID setting
+    $settings->add(new admin_setting_configtext(
+        'block_tildeva/course_id',
+        get_string('courseid', 'block_tildeva'),
+        get_string('courseid_desc', 'block_tildeva'),
+        '0',
+        PARAM_TEXT  
+    ));
+
+     
 }

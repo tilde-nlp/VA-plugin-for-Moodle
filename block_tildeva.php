@@ -87,6 +87,14 @@ class block_tildeva extends block_base
     public function get_content()
     {
         global $CFG, $PAGE, $DB, $COURSE, $USER;
+
+        $course_ids = get_config('block_tildeva', 'course_id');
+        $course_ids_array = explode(',', $course_ids);
+
+        // Check if the block is enabled and should be displayed in the current course
+        if (!in_array($COURSE->id, $course_ids_array)) {
+            return null;
+        }
         if (!isloggedin() ) {
            return null;
         }

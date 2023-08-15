@@ -32,3 +32,6 @@ $string['chattitle'] = 'Virtuālā asistente';
 // Notifications.
 $string['resetvisibilitysuccess'] = 'Veiksmi! Visas "block_tildeva" instances ir redzamas (atkal). <br/> Iestatījums "Atiestatīt redzamību" ir atiestatīts.';
 $string['resetvisibilityerror'] = 'Hmm... Atjauninot datu bāzes tabulas, radās kļūda... <br/> Iestatījums "Atiestatīt redzamību" ir atiestatīts.';
+
+$string['courseid'] = 'Atļautie kursi';
+$string['courseid_desc'] = 'Norādiet kursu ID, kuros būs pieejams šis virtuālais asistents vairākas vērtības atdala ar komatu)';
