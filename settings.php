@@ -35,5 +35,61 @@ if ($ADMIN->fulltree) {
         PARAM_TEXT  
     ));
 
+    // Add default style settings 
+    $settings->add(new admin_setting_configtextarea(
+        'block_tildeva/bot_style_default',
+        get_string('bot_style', 'block_tildeva'),
+        get_string('bot_style_desc', 'block_tildeva'),
+        "{
+            fontSizeSmall: '70%',
+            botAvatarImage: 'https://va.tilde.com/api/prodk8sbotcava0/media/staging/avatar.jpg',
+            botAvatarBackgroundColor: 'transparent',
+            botAvatarInitials: 'VA',
+            hideUploadButton: true,
+            backgroundColor: '#fff',
+            sendBoxBackground: '#C9DC50',
+            sendBoxBorderTop: '1px solid #CCC',
+            sendBoxPlaceholderColor: '#605e5c',
+            sendBoxTextColor: '#606060',
+            sendBoxButtonColorOnActive: '#C9DC50',
+            sendBoxButtonColorOnFocus: '#C9DC50',
+            sendBoxButtonColorOnHover: '#C9DC50',
+            sendBoxButtonShadeColor: 'transparent',
+            sendBoxButtonShadeColorOnActive: 'transparent',
+            sendBoxButtonShadeColorOnDisabled: 'transparent',
+            sendBoxButtonShadeColorOnFocus: 'transparent',
+            sendBoxButtonShadeColorOnHover: 'transparent',
+            transcriptActivityVisualKeyboardIndicatorColor: 'transparent',
+            bubbleBackground: '#eef2f8',
+            bubbleTextColor: '#606060',
+            markdownRespectCRLF: true,
+            bubbleBorderWidth: 0,
+            bubbleFromUserBorderWidth: 0,
+            bubbleFromUserBackground: '#C9DC50',
+            bubbleFromUserTextColor: '#ffffff',
+            paddingRegular: '15px',
+            subtle: '#606060',
+            paddingRegular: 10,
+            paddingWide: 15,
+            sendBoxHeight: 46,
+            typingAnimationBackgroundImage: 'url(https://va.tilde.com/api/prodk8sbotcava0/media/staging/typing.gif)',
+            typingAnimationWidth: 180,
+            bubbleMinHeight: 30,
+            suggestedActionBackground: 'transparent',
+            suggestedActionBorder: 'undefined', 
+            suggestedActionBorderColor: '#606060', 
+            suggestedActionBorderStyle: 'solid',
+            suggestedActionBorderWidth: 1,
+            suggestedActionBorderRadius: 0,
+            suggestedActionImageHeight: 20,
+            suggestedActionTextColor: '#606060',
+            suggestedActionDisabledBackground: 'undefined', 
+            suggestedActionHeight: 40,
+            bubbleMaxWidth: '80%',
+            bubbleBorderRadius: '0px',
+            bubbleFromUserBorderRadius: '0px'
+        }",
+        PARAM_TEXT  
+    ));
      
 }

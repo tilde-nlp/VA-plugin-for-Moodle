@@ -286,55 +286,7 @@ M.block_tildeva_ajax.init = function (Y, cfg) {
         },
 
         styleOptions: function () {
-            return {
-                fontSizeSmall: '70%',
-                botAvatarImage: 'https://va.tilde.com/api/prodk8sbotcava0/media/staging/avatar.jpg',
-                botAvatarBackgroundColor: 'transparent',
-                botAvatarInitials: 'VA',
-                hideUploadButton: true,
-                backgroundColor: '#fff',
-                sendBoxBackground: '#C9DC50',
-                sendBoxBorderTop: '1px solid #CCC',
-                sendBoxPlaceholderColor: '#605e5c',
-                sendBoxTextColor: '#606060',
-                sendBoxButtonColorOnActive: '#C9DC50',
-                sendBoxButtonColorOnFocus: '#C9DC50',
-                sendBoxButtonColorOnHover: '#C9DC50',
-                sendBoxButtonShadeColor: 'transparent',
-                sendBoxButtonShadeColorOnActive: 'transparent',
-                sendBoxButtonShadeColorOnDisabled: 'transparent',
-                sendBoxButtonShadeColorOnFocus: 'transparent',
-                sendBoxButtonShadeColorOnHover: 'transparent',
-                transcriptActivityVisualKeyboardIndicatorColor: 'transparent',
-                bubbleBackground: '#eef2f8',
-                bubbleTextColor: '#606060',
-                markdownRespectCRLF: true,
-                bubbleBorderWidth: 0,
-                bubbleFromUserBorderWidth: 0,
-                bubbleFromUserBackground: '#C9DC50',
-                bubbleFromUserTextColor: '#ffffff',
-                paddingRegular: '15px',
-                subtle: '#606060',
-                paddingRegular: 10,
-                paddingWide: 15,
-                sendBoxHeight: 46,
-                typingAnimationBackgroundImage: 'url(\'' + M.cfg.wwwroot + '/blocks/tildeva/assets/typing.gif' + '\')',
-                typingAnimationWidth: 180,
-                bubbleMinHeight: 30,
-                suggestedActionBackground: 'transparent',
-                suggestedActionBorder: undefined, // split into 3, null
-                suggestedActionBorderColor: '#606060', // defaults to accent
-                suggestedActionBorderStyle: 'solid',
-                suggestedActionBorderWidth: 1,
-                suggestedActionBorderRadius: 0,
-                suggestedActionImageHeight: 20,
-                suggestedActionTextColor: '#606060',
-                suggestedActionDisabledBackground: undefined, // defaults to suggestedActionBackground
-                suggestedActionHeight: 40,
-                bubbleMaxWidth: '80%',
-                bubbleBorderRadius: '0px',
-                bubbleFromUserBorderRadius: '0px',
-            }
+            return JSON.parse(this.cfg.bot_style.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:\s/g, '"$2": ').replaceAll('\'','"'));
         },
         send_callback: function (tid, outcome, args) {
             try {                

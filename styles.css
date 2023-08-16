@@ -36,6 +36,7 @@
     height: calc(100% - 56px - 32px);
     border-right: 1px solid var(--main-background-color);
     border-left: 1px solid var(--main-background-color);
+    background-color: #fff;
 }
 
 @media screen and (max-width: 576px) {
@@ -214,3 +215,6 @@
     background-color: var(--main-background-color) !important;
 }
 code{font-size: 100%!important;}
+
+.adminsettings .form-item .form-setting .form-defaultinfo,
+#admin-bot_style_default .form-item .form-setting .form-defaultinfo {display:none}

@@ -36,5 +36,12 @@ $string['courseid'] = 'Allowed Courses';
 $string['courseid_desc'] = 'Specify the course IDs where this virtual assistant will be available (multiple values separated by comma)';
 
 
+$string['bot_appearance'] = 'Virtual Assistant appearance';
+$string['bot_style'] = 'Virtual Assistant Style Settings';
+$string['bot_style_desc'] = 'Configure the style and appearance of the Virtual Assistant chat window.';
+
+
+
+
 
 

@@ -35,3 +35,7 @@ $string['resetvisibilityerror'] = 'Hmm... Atjauninot datu bāzes tabulas, radās
 
 $string['courseid'] = 'Atļautie kursi';
 $string['courseid_desc'] = 'Norādiet kursu ID, kuros būs pieejams šis virtuālais asistents vairākas vērtības atdala ar komatu)';
+
+$string['bot_appearance'] = 'Virtuālā asistenta izskats';
+$string['bot_style'] = 'Virtuālā asistenta stila iestatījumi';
+$string['bot_style_desc'] = 'Konfigurējiet Virtuālā asistenta izskatu un parādīšanas veidu tērzēšanas logā.';

@@ -4,6 +4,12 @@
 #### Changes
 -------
 
+### 2.2.2
+
+* 2023-08-17 - Enhanced Scenarios
+* 2023-08-17 - Permitted Courses Defined in Administrative Settings
+* 2023-08-17 - Configurable Styling in Both Administrative and Course Settings* 
+
 ### 2.1.7
 
 * 2023-06-18 - Bot can send messages to user (updated)
