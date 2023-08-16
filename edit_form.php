@@ -21,11 +21,19 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
 defined('MOODLE_INTERNAL') || die();
 
 
-$plugin->version   = 2023081638;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2022041900;        // Requires this Moodle version
-$plugin->maturity = MATURITY_ALPHA;
-$plugin->release = '2.2.2';
-$plugin->component = 'block_tildeva'; // Full name of the plugin (used for diagnostics)
+class block_tildeva_edit_form extends block_edit_form {
+    protected function specific_definition($mform) {
+        global $CFG;
+        $mform->addElement('header', 'configheader', get_string('bot_appearance', 'block_tildeva'));
+
+        $default_style = get_config('block_tildeva', 'bot_style_default');
+        $mform->addElement('textarea', 'config_bot_style', get_string('bot_style', 'block_tildeva'), 'wrap="virtual" rows="10" ');    
+        $mform->setType('config_bot_style', PARAM_TEXT);
+        $mform->setDefault('config_bot_style', $default_style ); // Set your default value        
+
+    }
+}

@@ -52,6 +52,10 @@ class block_tildeva extends block_base
     {
         return true;
     }
+    public function instance_allow_config() {
+        return true;
+    }
+   
 
     /**
      * instance_allow_multiple function
@@ -101,7 +105,20 @@ class block_tildeva extends block_base
         if ($this->content !== null) {
             return $this->content;
         }
-       
+
+        if (empty($this->config)) {
+            $this->config = new stdClass();
+        }
+
+        if (!empty($this->config->bot_style)) {
+            $bot_style =$this->config->bot_style;
+        }
+        else{
+            $bot_style =  get_config('block_tildeva', 'bot_style_default');
+        }
+
+     
+
         $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/tildeva/assets/webchat.js'), true);
         $module = array(
             'name' => 'block_tildeva_ajax',
@@ -126,6 +143,7 @@ class block_tildeva extends block_base
             'boturl' => 'https://va.tilde.com/dl/directline/aHR0cDovL3Byb2RrOHNib3RjYXZhMA==',
             'userid' => $USER->id,
             'courseid' => $COURSE->id,
+            'bot_style' => $bot_style
         );
 
 
@@ -197,4 +215,13 @@ document.body.appendChild(chat);
             'plugin' => $pluginconfigs,
         ];
     }
+
+    public function instance_config_save($data, $nolongerused = false) {
+        
+
+        // Call parent instance_config_save to handle the rest
+        parent::instance_config_save($data);
+    }
+
+
 }
