@@ -94,21 +94,69 @@ switch ($action) {
                     $params = explode("|", $command);
                     if (count($params) == 3) {
                         $sql = $params[1];
-                        if(strncmp($sql, "UPDATE", 6) === 0){
+                        if ((strncmp($sql, "UPDATE", 6) === 0) || (strncmp($sql, "INSERT", 6) === 0)) {
                             $result = $DB->execute($sql);
                             if ($result) {
                                 echo "success";
                             } else {
                                 echo "error";
                             }
-                        }
-                        else{
+                        } else {
                             $response[$params[2]] = $DB->get_records_sql($sql);
                             echo json_encode($response);
                         }
-                        
+
                     } else {
                         echo json_encode($command);
+                    }
+                } else if (strncmp($command, "feedback", 8) === 0) {
+                    $params = explode("|", $command);
+                    if (count($params) == 3) {
+                        // Load the feedback activity
+                        $feedback = $DB->get_record('feedback', array('name' => $params[1], 'course' => $courseid));
+
+                        if ($feedback) {
+                            $feedbackItem = $DB->get_record('feedback_item', array('feedback' => $feedback->id));
+
+                            $time = time();
+
+                            // Insert new submission
+                            $submissionData = array(
+                                'feedback' => $feedback->id,
+                                'anonymous_response' => 1,
+                                'anonymous' => 1,
+                                'course' => $feedback->course,
+                                'timecompleted' => $time,
+                                'timemodified' => $time,
+                                'userid' => $userid
+                            );
+                            $submissionId = $DB->insert_record('feedback_completed', (object) $submissionData);
+
+                            if ($submissionId) {
+                                // Insert feedback response
+                                $responseData = array(
+                                    'item' => $feedbackItem->id,
+                                    'completed' => $submissionId,
+                                    'course_id' => $feedback->course,
+                                    'anonymous_response' => 1,
+                                    'anonymous' => 1,
+                                    'timecreated' => $time,
+                                    'timemodified' => $time,
+                                    'value' => $params[2]
+                                );
+                                $responseId = $DB->insert_record('feedback_value', (object) $responseData);
+
+                                if ($responseId) {
+                                    echo json_encode("Feedback posted successfully.");
+                                } else {
+                                    echo json_encode("Error adding feedback response.");
+                                }
+                            } else {
+                                echo json_encode("Error creating feedback submission.");
+                            }
+                        } else {
+                            echo json_encode("Feedback activity not found.");
+                        }
                     }
                 } else if (strncmp($command, "sendmsg", 7) === 0) {
                     $params = explode("|", $command);
@@ -119,29 +167,29 @@ switch ($action) {
                         $format = FORMAT_HTML;
 
                         $eventdata = new \core\message\message();
-                        $eventdata->courseid         = $courseid;
-                        $eventdata->component        = 'moodle';
-                        $eventdata->name             = 'instantmessage';
-                        $eventdata->userfrom         = $userfrom;
-                        $eventdata->userto           = $userto;
-                    
+                        $eventdata->courseid = $courseid;
+                        $eventdata->component = 'moodle';
+                        $eventdata->name = 'instantmessage';
+                        $eventdata->userfrom = $userfrom;
+                        $eventdata->userto = $userto;
+
                         //using string manager directly so that strings in the message will be in the message recipients language rather than the senders
-                        $eventdata->subject          = get_string_manager()->get_string('unreadnewmessage', 'message', fullname($userfrom), $userto->lang);
-                    
+                        $eventdata->subject = get_string_manager()->get_string('unreadnewmessage', 'message', fullname($userfrom), $userto->lang);
+
                         if ($format == FORMAT_HTML) {
-                            $eventdata->fullmessagehtml  = $message;
+                            $eventdata->fullmessagehtml = $message;
                             //some message processors may revert to sending plain text even if html is supplied
                             //so we keep both plain and html versions if we're intending to send html
                             $eventdata->fullmessage = html_to_text($eventdata->fullmessagehtml);
                         } else {
-                            $eventdata->fullmessage      = $message;
-                            $eventdata->fullmessagehtml  = '';
+                            $eventdata->fullmessage = $message;
+                            $eventdata->fullmessagehtml = '';
                         }
-                    
+
                         $eventdata->fullmessageformat = $format;
-                        $eventdata->smallmessage     = $message;//store the message unfiltered. Clean up on output.
-                        $eventdata->timecreated     = time();
-                        $eventdata->notification    = 0;
+                        $eventdata->smallmessage = $message; //store the message unfiltered. Clean up on output.
+                        $eventdata->timecreated = time();
+                        $eventdata->notification = 0;
                         // User image.
                         $userpicture = new user_picture($userfrom);
                         $userpicture->size = 1; // Use f1 size.
@@ -155,8 +203,8 @@ switch ($action) {
                                 'send' => get_string_manager()->get_string('writeamessage', 'message', null, $eventdata->userto->lang),
                             ],
                         ];
-                        $messageId = message_send($eventdata);                       
-                        
+                        $messageId = message_send($eventdata);
+
 
                         // // Check if the message was sent successfully
                         if ($messageId) {
