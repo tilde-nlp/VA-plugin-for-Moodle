@@ -4,6 +4,10 @@
 #### Changes
 -------
 
+### 2.2.4
+* 2023-08-25 - Enhanced Scenarios
+* 2023-08-25 - Plugin functional and stabilization improvements
+  
 ### 2.2.2
 
 * 2023-08-17 - Enhanced Scenarios
