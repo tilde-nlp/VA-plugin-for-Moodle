@@ -4,7 +4,7 @@
 
 To install VA plugin from a ZIP file using the Moodle administration page, follow these steps:
 
-Step 1. Download the VA plugin source code to your current directory.
+Step 1. Download the [VA plugin source code](https://github.com/tilde-nlp/VA-plugin-for-Moodle/archive/refs/tags/v1.zip) to your current directory.
 
 Obtain the Git repository URL: Open the Git repository that contains the VA plugin source code and copy the repository URL.
 Open a terminal or command prompt on your computer and navigate to the directory where you want to store the VA plugin source code. 
