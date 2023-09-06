@@ -6,15 +6,8 @@ To install VA plugin from a ZIP file using the Moodle administration page, follo
 
 Step 1. Download the [VA plugin source code](https://github.com/tilde-nlp/VA-plugin-for-Moodle/releases/latest) to your current directory.
 
-Obtain the Git repository URL: Open the Git repository that contains the VA plugin source code and copy the repository URL.
-Open a terminal or command prompt on your computer and navigate to the directory where you want to store the VA plugin source code. 
-Clone the Git repository
 
-Step 2. Create a ZIP file of the VA plugin source code folder.
-
-The generated ZIP file (VA-plugin-for-Moodle.zip) can now be used for installation. It contains the complete VA plugin source code and can be uploaded to Moodle.
-
-Step 3. Install plugin 
+Step 2. Install plugin 
 
 - Log in to your Moodle administrator account and navigate to the Moodle administration panel.
 - Click on the "Plugins" section and select "Plugin Overview."
@@ -30,7 +23,7 @@ Step 3. Install plugin
 
 If the plugin does not appear after installation, double-check that the ZIP file is correct and the plugin installation was completed successfully. It might be necessary to perform additional configuration steps to fully activate the plugin.
 
-Step 4. Enable VA plugin
+Step 3. Enable VA plugin
 
 - Navigate to the course where you want to add the block plugin.
 - Ensure that editing mode is enabled. If the editing mode is not enabled, click on the "Edit mode" button usually located at the top right corner of the course page.
