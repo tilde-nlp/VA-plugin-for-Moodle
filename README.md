@@ -42,4 +42,5 @@ Transporta un sakaru institūtu un trim nozares partneriem – Tilde, Baltijas d
 kura mērķis ir sagatavot digitālos studiju kursu materiālus, lai veicinātu studentu digitālo prasmju attīstību.
 
 Projektu līdzfinansē REACT-EU finansējums pandēmijas krīzes seku mazināšanai.  
-
+https://www.ozolzile.lu.lv/en/noderigi/digiteka/
+[![DIGITEKA](digiteka.jpg)](https://www.ozolzile.lu.lv/en/noderigi/digiteka/)
