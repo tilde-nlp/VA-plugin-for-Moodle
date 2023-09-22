@@ -33,3 +33,9 @@ Step 3. Enable VA plugin
 - After you have added and configured the block plugin, remember to disable editing mode, click on the "Edit mode" button usually located at the top right corner of the course page.
 
 The block plugin should now be visible and functional within the course. 
+
+##Acknowledgements
+Latvijas Universitāte, sadarbojoties ar Latvijas Biozinātņu un tehnoloģiju  universitāti, Vidzemes augstskolu, Biznesa, mākslas un tehnoloģiju augstskolu RISEBA, Transporta un sakaru institūtu un trim nozares partneriem – Tilde, Baltijas datoru akadēmija un Datorzinību centrs, īsteno projektu “Digitalizācijas iniciatīvas studējošo iesaistei un studiju kvalitātes pilnveidei Latvijas Universitātē un projekta sadarbības partneru augstskolās” (Nr. 8.2.3.0/22/A/006), kura mērķis ir sagatavot digitālos studiju kursu materiālus, lai veicinātu studentu digitālo prasmju attīstību.
+
+Projektu līdzfinansē REACT-EU finansējums pandēmijas krīzes seku mazināšanai.  
+
