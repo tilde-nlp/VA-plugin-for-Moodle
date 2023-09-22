@@ -34,8 +34,12 @@ Step 3. Enable VA plugin
 
 The block plugin should now be visible and functional within the course. 
 
-##Acknowledgements
-Latvijas Universitāte, sadarbojoties ar Latvijas Biozinātņu un tehnoloģiju  universitāti, Vidzemes augstskolu, Biznesa, mākslas un tehnoloģiju augstskolu RISEBA, Transporta un sakaru institūtu un trim nozares partneriem – Tilde, Baltijas datoru akadēmija un Datorzinību centrs, īsteno projektu “Digitalizācijas iniciatīvas studējošo iesaistei un studiju kvalitātes pilnveidei Latvijas Universitātē un projekta sadarbības partneru augstskolās” (Nr. 8.2.3.0/22/A/006), kura mērķis ir sagatavot digitālos studiju kursu materiālus, lai veicinātu studentu digitālo prasmju attīstību.
+## Acknowledgements
+
+Latvijas Universitāte, sadarbojoties ar Latvijas Biozinātņu un tehnoloģiju  universitāti, Vidzemes augstskolu, Biznesa, mākslas un tehnoloģiju augstskolu RISEBA, 
+Transporta un sakaru institūtu un trim nozares partneriem – Tilde, Baltijas datoru akadēmija un Datorzinību centrs, īsteno projektu 
+“Digitalizācijas iniciatīvas studējošo iesaistei un studiju kvalitātes pilnveidei Latvijas Universitātē un projekta sadarbības partneru augstskolās” (Nr. 8.2.3.0/22/A/006), 
+kura mērķis ir sagatavot digitālos studiju kursu materiālus, lai veicinātu studentu digitālo prasmju attīstību.
 
 Projektu līdzfinansē REACT-EU finansējums pandēmijas krīzes seku mazināšanai.  
 
