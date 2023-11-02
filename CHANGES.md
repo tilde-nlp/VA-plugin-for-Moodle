@@ -4,6 +4,9 @@
 #### Changes
 -------
 
+### 3.2.1
+* 2023-11-02 - Added support for Moodle versions 3.9 and 4.3.
+
 ### 2.2.4
 * 2023-08-25 - Enhanced Scenarios
 * 2023-08-25 - Plugin functional and stabilization improvements
