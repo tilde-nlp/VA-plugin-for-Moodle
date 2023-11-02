@@ -24,8 +24,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-$plugin->version   = 2023082403;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2022041900;        // Requires this Moodle version
+$plugin->version   = 2023110203;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->requires  = 2020061524;        // Requires this Moodle version
 $plugin->maturity = MATURITY_ALPHA;
-$plugin->release = '2.2.4';
+$plugin->release = '3.2.1';
 $plugin->component = 'block_tildeva'; // Full name of the plugin (used for diagnostics)
