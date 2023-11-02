@@ -119,7 +119,7 @@ class block_tildeva extends block_base
 
      
 
-        $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/tildeva/assets/webchat.js'), true);
+        $PAGE->requires->js(new moodle_url($CFG->wwwroot . '/blocks/tildeva/assets/webchat.js?v=2023110202'), true);
         $module = array(
             'name' => 'block_tildeva_ajax',
             // Chat gui's are not real plugins, we have to break the naming standards for JS modules here.
