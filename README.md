@@ -4,17 +4,10 @@
 
 To install VA plugin from a ZIP file using the Moodle administration page, follow these steps:
 
-Step 1. Download the VA plugin source code to your current directory.
+Step 1. Download the [VA plugin source code](https://github.com/tilde-nlp/VA-plugin-for-Moodle/releases/latest) to your current directory.
 
-Obtain the Git repository URL: Open the Git repository that contains the VA plugin source code and copy the repository URL.
-Open a terminal or command prompt on your computer and navigate to the directory where you want to store the VA plugin source code. 
-Clone the Git repository
 
-Step 2. Create a ZIP file of the VA plugin source code folder.
-
-The generated ZIP file (VA-plugin-for-Moodle.zip) can now be used for installation. It contains the complete VA plugin source code and can be uploaded to Moodle.
-
-Step 3. Install plugin 
+Step 2. Install plugin 
 
 - Log in to your Moodle administrator account and navigate to the Moodle administration panel.
 - Click on the "Plugins" section and select "Plugin Overview."
@@ -30,7 +23,7 @@ Step 3. Install plugin
 
 If the plugin does not appear after installation, double-check that the ZIP file is correct and the plugin installation was completed successfully. It might be necessary to perform additional configuration steps to fully activate the plugin.
 
-Step 4. Enable VA plugin
+Step 3. Enable VA plugin
 
 - Navigate to the course where you want to add the block plugin.
 - Ensure that editing mode is enabled. If the editing mode is not enabled, click on the "Edit mode" button usually located at the top right corner of the course page.
@@ -40,3 +33,14 @@ Step 4. Enable VA plugin
 - After you have added and configured the block plugin, remember to disable editing mode, click on the "Edit mode" button usually located at the top right corner of the course page.
 
 The block plugin should now be visible and functional within the course. 
+
+## Acknowledgements
+
+Latvijas Universitāte, sadarbojoties ar Latvijas Biozinātņu un tehnoloģiju  universitāti, Vidzemes augstskolu, Biznesa, mākslas un tehnoloģiju augstskolu RISEBA, 
+Transporta un sakaru institūtu un trim nozares partneriem – Tilde, Baltijas datoru akadēmija un Datorzinību centrs, īsteno projektu 
+“Digitalizācijas iniciatīvas studējošo iesaistei un studiju kvalitātes pilnveidei Latvijas Universitātē un projekta sadarbības partneru augstskolās” (Nr. 8.2.3.0/22/A/006), 
+kura mērķis ir sagatavot digitālos studiju kursu materiālus, lai veicinātu studentu digitālo prasmju attīstību.
+
+Projektu līdzfinansē REACT-EU finansējums pandēmijas krīzes seku mazināšanai.  
+
+[![DIGITEKA](digiteka.jpg)](https://www.ozolzile.lu.lv/en/noderigi/digiteka/)
