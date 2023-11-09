@@ -4,6 +4,11 @@
 #### Changes
 -------
 
+### 4.1.1
+
+* 2023-09-11 - Enhanced Security
+* 2023-09-11 - Functions added to be used in bot backend
+
 ### 2.2.2
 
 * 2023-08-17 - Enhanced Scenarios
