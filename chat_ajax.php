@@ -32,8 +32,6 @@ $conversationid = optional_param('chat_convid', '', PARAM_RAW);
 $input = optional_param('chat_msg', '', PARAM_RAW);
 
 
-
-
 if (!$chatsession = $DB->get_record('chat_sessions', array('userid' => $userid, 'courseid' => $courseid))) {
     $chatsession = new stdClass();
     $chatsession->conversationid = 0;
@@ -94,18 +92,8 @@ switch ($action) {
                     $params = explode("|", $command);
                     if (count($params) == 3) {
                         $sql = $params[1];
-                        if ((strncmp($sql, "UPDATE", 6) === 0) || (strncmp($sql, "INSERT", 6) === 0)) {
-                            $result = $DB->execute($sql);
-                            if ($result) {
-                                echo "success";
-                            } else {
-                                echo "error";
-                            }
-                        } else {
-                            $response[$params[2]] = $DB->get_records_sql($sql);
-                            echo json_encode($response);
-                        }
-
+                        $response[$params[2]] = $DB->get_records_sql($sql);
+                        echo json_encode($response);
                     } else {
                         echo json_encode($command);
                     }
@@ -158,6 +146,27 @@ switch ($action) {
                             echo json_encode("Feedback activity not found.");
                         }
                     }
+                } else if (strncmp($command, "getpostbyname", 13) === 0) {
+                    $params = explode("|", $command);
+                    if (count($params) == 2) {
+                        $sql = "SELECT p.message AS post_body, d.id AS discussion_id, p.id AS post_id
+                                FROM {forum_discussions} d
+                                LEFT JOIN {forum_posts} p ON d.id = p.discussion
+                                WHERE (d.name = :dname OR p.subject = :pname) AND d.course = :course
+                                LIMIT 1";
+
+                        $params = array('dname' => $params[1], 'pname' => $params[1], 'course' => $courseid);
+
+                        $result = $DB->get_records_sql($sql, $params);
+
+                        if ($result) {
+                            echo json_encode($result);
+                        } else {
+                            echo json_encode("Post not found.");
+                        }
+                    } else {
+                        echo json_encode("Post not found.");
+                    }
                 } else if (strncmp($command, "sendmsg", 7) === 0) {
                     $params = explode("|", $command);
                     if (count($params) == 3) {
@@ -200,8 +209,8 @@ switch ($action) {
                                 'send' => get_string_manager()->get_string('send', 'message', null, $eventdata->userto->lang),
                             ],
                             'placeholders' => [
-                                'send' => get_string_manager()->get_string('writeamessage', 'message', null, $eventdata->userto->lang),
-                            ],
+                                    'send' => get_string_manager()->get_string('writeamessage', 'message', null, $eventdata->userto->lang),
+                                ],
                         ];
                         $messageId = message_send($eventdata);
 
@@ -238,6 +247,24 @@ switch ($action) {
 
                             $response['userinfo']['userroles'] = implode(", ", $roleNames);
                             echo json_encode($response);
+                            break;
+                        case 'getteacherinfo':
+                            $teacherRoleId = $DB->get_field('role', 'id', array('shortname' => 'teacher'));
+                            $editingTeacherRoleId = $DB->get_field('role', 'id', array('shortname' => 'editingteacher'));
+
+                            // Get the list of users with both teacher and editingteacher roles in the current course
+                            $teachers = array_merge(
+                                get_role_users($teacherRoleId, $courseContext),
+                                get_role_users($editingTeacherRoleId, $courseContext)
+                            );
+                            echo json_encode($teachers);
+                            break;
+                        case 'getcoursesections':
+                            $params = array('course' => $courseid);
+
+                            $sql = "SELECT name, section FROM {course_sections} WHERE course = :course ORDER BY id ASC";
+                            $sections = $DB->get_records_sql($sql, $params);
+                            echo json_encode($sections);
                             break;
                         case 'getcourseinfo':
                             $currentCourse = get_course($courseid);
@@ -315,6 +342,15 @@ switch ($action) {
 
                             echo json_encode($testResults);
                             break;
+                        case 'getversion':
+                           
+
+                        
+                            $response['moodleversion'] = $CFG->version;
+                            $response['pluginversion'] = get_config('block_tildeva')->version;
+                            echo json_encode($response);
+                            break;
+
                         default:
                             echo json_encode($command);
                             break;
