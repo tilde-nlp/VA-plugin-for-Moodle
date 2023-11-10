@@ -4,11 +4,14 @@
 #### Changes
 -------
 
+### 4.1.2
+
+* 2023-11-10 - User teacher context
 
 ### 4.1.1
 
-* 2023-09-11 - Enhanced Security
-* 2023-09-11 - Functions added to be used in bot backend
+* 2023-11-09 - Enhanced Security
+* 2023-11-09 - Functions added to be used in bot backend
 
 ### 3.2.1
 * 2023-11-02 - Added support for Moodle versions 3.9 and 4.3.
