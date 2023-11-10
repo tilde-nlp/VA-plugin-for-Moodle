@@ -57,6 +57,24 @@ header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
 header('Content-Type: text/html; charset=utf-8');
 
+
+
+// Get the user's roles in the course
+$userRoles = get_user_roles($courseContext, $userId, false);
+
+// Check if the user has the 'teacher' or 'editingteacher' role
+$hasTeacherRole = false;
+
+foreach ($userRoles as $role) {
+    $roleShortname = $role->shortname;
+    
+    if ($roleShortname === 'teacher') {
+        $hasTeacherRole = true;
+    } elseif ($roleShortname === 'editingteacher') {
+        $hasTeacherRole = true;
+    }
+}
+
 switch ($action) {
     case 'init':
         $response['firstname'] = $USER->firstname;
@@ -233,12 +251,7 @@ switch ($action) {
                             $response['userinfo']['lastname'] = $USER->lastname;
                             $response['userinfo']['email'] = $USER->email;
                             $response['userinfo']['username'] = $USER->username;
-                            // Get the course context
-                            $context = context_course::instance($courseid);
-
-                            // Get the user's roles in the course
-                            $userRoles = get_user_roles($context, $userid, false);
-
+                           
                             // Iterate through the roles and extract role names
                             $roleNames = array();
                             foreach ($userRoles as $role) {
@@ -265,6 +278,11 @@ switch ($action) {
                             $sql = "SELECT name, section FROM {course_sections} WHERE course = :course ORDER BY id ASC";
                             $sections = $DB->get_records_sql($sql, $params);
                             echo json_encode($sections);
+                            break;
+                        case 'getquizzes':
+                            $currentCourse = get_course($courseid);
+                            $quizzes = get_all_instances_in_course('quiz', $currentCourse, $userid);
+                            echo json_encode($quizzes);
                             break;
                         case 'getcourseinfo':
                             $currentCourse = get_course($courseid);
@@ -304,6 +322,16 @@ switch ($action) {
                                 $i++;
                             }
                             echo json_encode($response);
+                            break;
+                        case 'getgroups':
+                            if($hasTeacherRole) {
+                                $groups = groups_get_all_groups($courseid);                                
+                                echo json_encode($groups);
+                            }
+                            else{
+                                header('HTTP/1.1 405 Method Not Allowed');
+                                exit('Method Not Allowed');
+                            }
                             break;
                         case 'gettestinfo':
                             // Define the database tables and columns
