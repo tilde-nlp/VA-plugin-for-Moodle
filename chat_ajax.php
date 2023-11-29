@@ -24,6 +24,7 @@
 define('AJAX_SCRIPT', true);
 
 require(__DIR__ . '/../../config.php');
+require_once($CFG->dirroot . '/lib/setup.php');
 
 $action = optional_param('action', '', PARAM_ALPHANUM);
 $userid = optional_param('chat_usid', 0, PARAM_INT);
@@ -60,14 +61,14 @@ header('Content-Type: text/html; charset=utf-8');
 
 
 // Get the user's roles in the course
-$userRoles = get_user_roles($courseContext, $userId, false);
+$userRoles = get_user_roles($courseContext, $userid, false);
 
 // Check if the user has the 'teacher' or 'editingteacher' role
 $hasTeacherRole = false;
 
 foreach ($userRoles as $role) {
     $roleShortname = $role->shortname;
-    
+
     if ($roleShortname === 'teacher') {
         $hasTeacherRole = true;
     } elseif ($roleShortname === 'editingteacher') {
@@ -99,7 +100,6 @@ switch ($action) {
         break;
     case 'msg':
         if ($input) {
-
             $matches = array();
             $matchCount = preg_match('/:(.+)$/', $input, $matches);
 
@@ -185,6 +185,148 @@ switch ($action) {
                     } else {
                         echo json_encode("Post not found.");
                     }
+                } else if (strncmp($command, "settimeclose", 12) === 0) {
+                    if ($hasTeacherRole) {
+                        $params = explode("|", $command);
+                        if (count($params) == 4) {
+                            $moduleid = $params[1];
+                            $oldEndDate = strtotime($params[2]);
+                            $newEndDate = strtotime($params[3]);
+
+                            $quizid = $DB->get_field('course_modules', 'instance', array('id' => $moduleid), MUST_EXIST);
+
+
+                            // Load the quiz
+                            $quiz = $DB->get_record('quiz', array('id' => $quizid, 'course' => $courseid), '*', MUST_EXIST);
+
+                            if ($quiz && $oldEndDate == $quiz->timeclose) {
+                                // Update the end date
+                                $quiz->timeclose = $newEndDate;
+
+                                // Save the changes
+                                $DB->update_record('quiz', $quiz);
+
+                            }
+                            $response['quiz']['id'] = $quiz->id;
+                            $response['quiz']['name'] = $quiz->name;
+                            $response['quiz']['timeclose'] = date('Y-m-d H:i:s', $quiz->timeclose);
+                            $response['quiz']['timeopen'] = date('Y-m-d H:i:s', $quiz->timeopen);
+                            echo json_encode($response);
+
+                        }
+                    } else {
+                        header('HTTP/1.1 405 Method Not Allowed');
+                        exit('Method Not Allowed');
+                    }
+
+                } else if (strncmp($command, "settimeopen", 11) === 0) {
+                    if ($hasTeacherRole) {
+                        $params = explode("|", $command);
+                        if (count($params) == 4) {
+                            $moduleid = $params[1];
+                            $oldStartDate = strtotime($params[2]);
+                            $newSartDate = strtotime($params[3]);
+
+                            $quizid = $DB->get_field('course_modules', 'instance', array('id' => $moduleid), MUST_EXIST);
+
+
+                            // Load the quiz
+                            $quiz = $DB->get_record('quiz', array('id' => $quizid, 'course' => $courseid), '*', MUST_EXIST);
+
+                            if ($quiz && $oldStartDate == $quiz->timeopen) {
+                                // Update the end date
+                                $quiz->timeopen = $newSartDate;
+
+                                // Save the changes
+                                $DB->update_record('quiz', $quiz);
+
+                            }
+                            $response['quiz']['id'] = $quiz->id;
+                            $response['quiz']['name'] = $quiz->name;
+                            $response['quiz']['timeopen'] = date('Y-m-d H:i:s', $quiz->timeopen);
+                            $response['quiz']['timeclose'] = date('Y-m-d H:i:s', $quiz->timeclose);
+                            echo json_encode($response);
+
+                        }
+                    } else {
+                        header('HTTP/1.1 405 Method Not Allowed');
+                        exit('Method Not Allowed');
+                    }
+
+                } else if (strncmp($command, "getquizzesstats", 15) === 0) {
+                    $currentCourse = get_course($courseid);
+
+                    // Assuming $command, $courseid, $userid, $hasTeacherRole are already defined
+
+                    if ($hasTeacherRole) {
+                        $params = explode("|", $command);
+
+                        if (count($params) == 2) {
+                            $gradetopass = $params[1];
+
+                            $quizzes = get_all_instances_in_course('quiz', $currentCourse, $userid);
+
+                            $studentRoleId = $DB->get_field('role', 'id', array('shortname' => 'student'));
+                            $studentIds = $DB->get_records_sql("SELECT u.id FROM {user} u JOIN {role_assignments} ra ON u.id = ra.userid WHERE ra.contextid IN (SELECT id FROM {context} WHERE contextlevel = :courselevel AND instanceid = :courseid) AND ra.roleid = :studentrole", array('courselevel' => CONTEXT_COURSE, 'courseid' => $courseid, 'studentrole' => $studentRoleId));
+
+                            foreach ($quizzes as $quizid => $quiz) {
+                                $sectionInfo = $DB->get_record_sql(
+                                    "SELECT s.section AS section_id, s.name AS section_name
+                                        FROM {course_sections} s
+                                        INNER JOIN {course_modules} cm ON s.id = cm.section
+                                        WHERE cm.id = :quizid",
+                                    array('quizid' => $quiz->coursemodule)
+                                );
+
+                                $quizzes[$quizid]->section_name = $sectionInfo->section_name;
+                                $quizzes[$quizid]->section_id = $sectionInfo->section_id;
+                                $quizzes[$quizid]->passCount = 0;
+                                $quizzes[$quizid]->failCount = 0;
+                                $quizzes[$quizid]->passuserids = array();
+                                $quizzes[$quizid]->failuserids = array();
+
+                                foreach ($studentIds as $user) {
+                                    $maxAttempt = $DB->get_record_sql(
+                                        "SELECT MAX(qa.sumgrades) as maxsumgrades
+                                            FROM {quiz_attempts} qa
+                                            WHERE qa.quiz = :quizid AND qa.userid = :userid",
+                                        array('quizid' => $quiz->id, 'userid' => $user->id)
+                                    );
+
+                                    if (!empty($maxAttempt)) {
+                                        if ($quiz->sumgrades == 0) {
+                                            $finalgrade = 0;
+                                        } else {
+                                            $finalgrade = $quiz->grade / $quiz->sumgrades * $maxAttempt->maxsumgrades;
+                                        }
+
+                                        if ($finalgrade >= $gradetopass) {
+                                            $quizzes[$quizid]->passCount++;
+                                            $quizzes[$quizid]->passuserids[] = $user->id;
+                                        } else {
+                                            $quizzes[$quizid]->failCount++;
+                                            $quizzes[$quizid]->failuserids[] = $user->id;
+                                        }
+                                    } else {
+                                        $quizzes[$quizid]->failCount++;
+                                        $quizzes[$quizid]->failuserids[] = $user->id;
+                                    }
+                                }
+
+                                $quizzes[$quizid]->t_timeclose = date('Y-m-d H:i:s', $quiz->timeclose);
+                                $quizzes[$quizid]->t_timeopen = date('Y-m-d H:i:s', $quiz->timeopen);
+                            }
+
+                            echo json_encode($quizzes);
+                        } else {
+                            header('HTTP/1.1 400 Bad Request');
+                            exit('Invalid parameters');
+                        }
+                    } else {
+                        header('HTTP/1.1 405 Method Not Allowed');
+                        exit('Method Not Allowed');
+                    }
+
                 } else if (strncmp($command, "sendmsg", 7) === 0) {
                     $params = explode("|", $command);
                     if (count($params) == 3) {
@@ -227,12 +369,10 @@ switch ($action) {
                                 'send' => get_string_manager()->get_string('send', 'message', null, $eventdata->userto->lang),
                             ],
                             'placeholders' => [
-                                    'send' => get_string_manager()->get_string('writeamessage', 'message', null, $eventdata->userto->lang),
-                                ],
+                                'send' => get_string_manager()->get_string('writeamessage', 'message', null, $eventdata->userto->lang),
+                            ],
                         ];
                         $messageId = message_send($eventdata);
-
-
                         // // Check if the message was sent successfully
                         if ($messageId) {
                             echo json_encode('Notification sent');
@@ -251,7 +391,7 @@ switch ($action) {
                             $response['userinfo']['lastname'] = $USER->lastname;
                             $response['userinfo']['email'] = $USER->email;
                             $response['userinfo']['username'] = $USER->username;
-                           
+
                             // Iterate through the roles and extract role names
                             $roleNames = array();
                             foreach ($userRoles as $role) {
@@ -282,6 +422,38 @@ switch ($action) {
                         case 'getquizzes':
                             $currentCourse = get_course($courseid);
                             $quizzes = get_all_instances_in_course('quiz', $currentCourse, $userid);
+
+                            foreach ($quizzes as $quizid => $quiz) {
+                                $sectionInfo = $DB->get_record_sql(
+                                    "SELECT s.section AS section_id, s.name AS section_name
+                                        FROM {course_sections} s
+                                        INNER JOIN {course_modules} cm ON s.id = cm.section
+                                        WHERE cm.id = :quizid",
+                                    array('quizid' => $quiz->coursemodule)
+                                );
+
+                                $maxAttempt = $DB->get_record_sql(
+                                    "SELECT MAX(qa.sumgrades) AS maxsumgrades, MAX(qa.timefinish) AS maxtimefinish
+                                        FROM {quiz_attempts} qa
+                                        WHERE qa.quiz = :quizid AND qa.userid = :userid",
+                                    array('quizid' => $quiz->id, 'userid' => $userid)
+                                );
+
+                                $quizzes[$quizid]->section_name = $sectionInfo->section_name;
+                                $quizzes[$quizid]->section_id = $sectionInfo->section_id;
+                                $quizzes[$quizid]->maxsumgrade = $maxAttempt->maxsumgrades;
+                                $quizzes[$quizid]->maxtimefinish = date('Y-m-d H:i:s', $maxAttempt->maxtimefinish);
+
+                                if ($quiz->sumgrades == 0) {
+                                    $quizzes[$quizid]->finalgrade = 0;
+                                } else {
+                                    $quizzes[$quizid]->finalgrade = $quiz->grade / $quiz->sumgrades * $maxAttempt->maxsumgrades;
+                                }
+
+                                $quizzes[$quizid]->t_timeclose = date('Y-m-d H:i:s', $quiz->timeclose);
+                                $quizzes[$quizid]->t_timeopen = date('Y-m-d H:i:s', $quiz->timeopen);
+                            }
+
                             echo json_encode($quizzes);
                             break;
                         case 'getcourseinfo':
@@ -324,11 +496,10 @@ switch ($action) {
                             echo json_encode($response);
                             break;
                         case 'getgroups':
-                            if($hasTeacherRole) {
-                                $groups = groups_get_all_groups($courseid);                                
+                            if ($hasTeacherRole) {
+                                $groups = groups_get_all_groups($courseid);
                                 echo json_encode($groups);
-                            }
-                            else{
+                            } else {
                                 header('HTTP/1.1 405 Method Not Allowed');
                                 exit('Method Not Allowed');
                             }
@@ -371,11 +542,8 @@ switch ($action) {
                             echo json_encode($testResults);
                             break;
                         case 'getversion':
-                           
-
-                        
                             $response['moodleversion'] = $CFG->version;
-                            $response['pluginversion'] = get_config('block_tildeva')->version;
+                            $response['pluginversion'] = get_config('block_tildeva')->release;
                             echo json_encode($response);
                             break;
 
