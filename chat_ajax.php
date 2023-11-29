@@ -543,7 +543,12 @@ switch ($action) {
                             break;
                         case 'getversion':
                             $response['moodleversion'] = $CFG->version;
-                            $response['pluginversion'] = get_config('block_tildeva')->release;
+                            $pluginConfig = get_config('block_tildeva');
+                            if (!empty($pluginConfig) && isset($pluginConfig->release)) {
+                                $response['pluginversion'] = $pluginConfig->release;
+                            } else {
+                                $response['pluginversion'] = 'v5';
+                            }
                             echo json_encode($response);
                             break;
 
