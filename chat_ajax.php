@@ -106,16 +106,7 @@ switch ($action) {
             if ($matchCount > 0) {
                 // Match found
                 $command = $matches[1];
-                if (strncmp($command, "db|", 3) === 0) {
-                    $params = explode("|", $command);
-                    if (count($params) == 3) {
-                        $sql = $params[1];
-                        $response[$params[2]] = $DB->get_records_sql($sql);
-                        echo json_encode($response);
-                    } else {
-                        echo json_encode($command);
-                    }
-                } else if (strncmp($command, "feedback", 8) === 0) {
+                if (strncmp($command, "feedback", 8) === 0) {
                     $params = explode("|", $command);
                     if (count($params) == 3) {
                         // Load the feedback activity

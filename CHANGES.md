@@ -7,6 +7,7 @@
 
 * 2023-11-29 - Quiz info
 * 2023-11-29 - Update openig/closing dates for quizzes
+* 2023-11-29 - Remove get
   
 ### 4.1.2
 
