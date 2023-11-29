@@ -3,7 +3,11 @@
 
 #### Changes
 -------
+### 4.1.5
 
+* 2023-11-29 - Quiz info
+* 2023-11-29 - Update openig/closing dates for quizzes
+  
 ### 4.1.2
 
 * 2023-11-10 - User teacher context
