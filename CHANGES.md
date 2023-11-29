@@ -3,7 +3,7 @@
 
 #### Changes
 -------
-### 4.1.5
+### 5.1.0
 
 * 2023-11-29 - Quiz info
 * 2023-11-29 - Update openig/closing dates for quizzes
